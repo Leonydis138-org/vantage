@@ -1,0 +1,135 @@
+{
+  "meta": {
+    "generated_at": "2026-09-25T00:00:00Z",
+    "schema_version": "1.0",
+    "system_status": "bootstrapping"
+  },
+  "revenue": {
+    "currency": "USD",
+    "week": 0,
+    "month": 0,
+    "all_time": 0,
+    "trend_pct_30d": 0,
+    "by_source": []
+  },
+  "branches": [
+    {
+      "id": "branch_a",
+      "name": "Authority Niche (VoIP / Telecoms / ITSM)",
+      "status": "Active",
+      "quota_per_week": 3,
+      "traffic_30d": 0,
+      "clicks_30d": 0,
+      "conversions_30d": 0,
+      "revenue_30d": 0,
+      "score": 0,
+      "notes": "Practitioner notes pulled from CEO's LinkedIn (15+ yrs VoIP/telecoms/IT, 9+ SA carriers, PBX/CCTV/wireless certs). Backlog seeded with 8 articles. Article 1 of 8 drafted, awaiting CEO fact-check before SEO/AEO pass."
+    },
+    {
+      "id": "branch_b",
+      "name": "Opportunistic Scout",
+      "status": "Growing",
+      "quota_per_week": 2,
+      "traffic_30d": 0,
+      "clicks_30d": 0,
+      "conversions_30d": 0,
+      "revenue_30d": 0,
+      "score": 0,
+      "notes": "No test clusters launched yet."
+    },
+    {
+      "id": "branch_c",
+      "name": "Micro-SaaS (VoIP Calculators)",
+      "status": "Maintenance",
+      "quota_per_week": 1,
+      "traffic_30d": 0,
+      "clicks_30d": 0,
+      "conversions_30d": 0,
+      "revenue_30d": 0,
+      "score": 0,
+      "notes": "Free-tier calculator built 2026-09-25 (bandwidth/subnet/SLA tools, single static page, no login). Not deployed yet — needs Cloudflare Pages connected. Pro tier + Paddle checkout blocked on KYC (dq_001)."
+    }
+  ],
+  "decision_queue": [
+    {
+      "id": "dq_001",
+      "type": "setup",
+      "title": "Complete human-only setup steps",
+      "detail": "Domain registration, bank account, Paddle/Stripe KYC not yet confirmed complete.",
+      "requires": "ceo_approval",
+      "created_at": "2026-09-25T00:00:00Z"
+    },
+    {
+      "id": "dq_002",
+      "type": "new_opportunity",
+      "title": "Confirm: add freelance IT/VoIP consulting CTA to Branch A content?",
+      "detail": "CEO's LinkedIn shows open-to-work status. Branch A articles could close with a soft consulting CTA, but this needs explicit CEO confirmation before Writer adds it to any drafts.",
+      "requires": "ceo_approval",
+      "created_at": "2026-09-25T01:00:00Z"
+    },
+    {
+      "id": "dq_003",
+      "type": "new_opportunity",
+      "title": "Branch B candidate: SMB Cybersecurity / Network Security cluster",
+      "detail": "Scout flags overlap with CEO's existing networking skillset. Cited: NordLayer affiliate program (recurring commission), HackerDNA cybersecurity affiliate roundup. Confidence: low — no keyword/volume data, Search Console not yet connected. Scout's own read: cheaper to test as a Branch A section first rather than a standalone Branch B cluster.",
+      "requires": "ceo_approval",
+      "created_at": "2026-09-25T03:00:00Z"
+    },
+    {
+      "id": "dq_004",
+      "type": "new_opportunity",
+      "title": "Branch B candidate: Smart Home / SMB Physical Security angle",
+      "detail": "Overlaps with Branch A backlog item 6 (Hikvision CCTV article). Cited: Canary, Frontpoint, FlexOffers affiliate programs. Confidence: low. Scout recommends folding into the existing Branch A article rather than a new cluster.",
+      "requires": "ceo_approval",
+      "created_at": "2026-09-25T03:00:00Z"
+    },
+    {
+      "id": "dq_005",
+      "type": "new_opportunity",
+      "title": "Branch B candidate: Remote-work IT/ITSM tooling cluster",
+      "detail": "Overlaps with Branch A backlog items 5 and 7. No specific affiliate program vetted yet — needs a follow-up Scout pass before this could move to affiliate_program_review. Confidence: low.",
+      "requires": "ceo_approval",
+      "created_at": "2026-09-25T03:00:00Z"
+    }
+  ],
+  "activity_feed": [
+    {
+      "timestamp": "2026-09-27T01:00:00Z",
+      "agent": "System",
+      "action": "Build Order step 7 complete: docs/handoff-guide.md rewritten to reflect actual build status, day-to-day run steps, the dashboard export-then-commit flow, and the open Decision Queue items (dq_001-dq_005) still blocking full launch. Skeleton build phase is done; the system now runs on ongoing agent cycles + Decision Queue review."
+    },
+    {
+      "timestamp": "2026-09-27T00:00:00Z",
+      "agent": "Product/Dev",
+      "action": "Bridge dashboard: wired live data.json auto-load (with polling every 5 min + multi-path fallback), added a source/last-sync indicator, and an on-screen banner that reminds the CEO Approve/Reject on the Decision Queue is local-only until exported and committed. No auto-write-back to the repo, by design (Build Order step 6)."
+    },
+    {
+      "timestamp": "2026-09-25T04:00:00Z",
+      "agent": "Product/Dev",
+      "action": "Built Branch C free-tier calculator (VoIP bandwidth, subnet/CIDR, SLA uptime) as a single static page. Worker backend scaffolded as a stub — Pro-tier routes return 501 until Paddle/Stripe KYC (dq_001) and CEO-confirmed feature list. Not yet deployed to Cloudflare Pages."
+    },
+    {
+      "timestamp": "2026-09-25T03:00:00Z",
+      "agent": "Scout",
+      "action": "Ran Branch B opportunistic scan (no Search Console data yet — general web research only). Logged 3 low-confidence candidate niches to docs/scout-log.md. Recommendation: fold 2 of 3 into Branch A rather than spin up a new cluster yet. Added decision_queue entries dq_003-dq_005."
+    },
+    {
+      "timestamp": "2026-09-25T02:00:00Z",
+      "agent": "Writer",
+      "action": "Drafted article 1/8: 'SIP Trunking Setup: What Actually Goes Wrong (And How to Fix It)'. Status: needs-review. Contains 2 affiliate placeholders, no consulting CTA (dq_002 still pending). Awaiting CEO fact-check before SEO/AEO Editor pass."
+    },
+    {
+      "timestamp": "2026-09-25T01:00:00Z",
+      "agent": "Scout",
+      "action": "Pulled CEO's LinkedIn profile (juan-louw-greyling-a583a2b2). Wrote docs/branch-a-notes.md and seeded branches/branch-a-authority/backlog.md with 8 article ideas."
+    },
+    {
+      "timestamp": "2026-09-25T00:00:00Z",
+      "agent": "System",
+      "action": "Repository skeleton initialized. Awaiting first Scout and Writer runs."
+    }
+  ],
+  "report": {
+    "last_weekly_summary": null
+  }
+}

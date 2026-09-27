@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>VoIP Network Calculator — Bandwidth, Subnet &amp; SLA | VANTAGE</title>
+<meta name="description" content="Free VoIP bandwidth calculator, subnet/CIDR calculator, and SLA uptime calculator. Built by a 15+ year VoIP/networking engineer." />
+<style>
+  :root{
+    --bg:#0a0e1a; --panel:#111827; --panel2:#0d1420; --border:#1f2937;
+    --text:#e5e7eb; --muted:#8b95a7; --accent:#22d3ee; --accent2:#a78bfa;
+    --good:#34d399; --warn:#fbbf24; --bad:#f87171;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
+  header{padding:28px 24px 18px;border-bottom:1px solid var(--border);}
+  header h1{margin:0;font-size:22px;letter-spacing:.3px;}
+  header h1 span{color:var(--accent);}
+  header p{margin:6px 0 0;color:var(--muted);font-size:14px;max-width:640px;}
+  .wrap{max-width:900px;margin:0 auto;padding:24px;}
+  .tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+  .tab{padding:10px 18px;border-radius:8px;border:1px solid var(--border);background:var(--panel);color:var(--muted);cursor:pointer;font-size:14px;font-weight:600;}
+  .tab.active{background:linear-gradient(135deg,rgba(34,211,238,.18),rgba(167,139,250,.18));color:var(--text);border-color:var(--accent);}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media (max-width:640px){.grid{grid-template-columns:1fr;}}
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:600;}
+  select,input{width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--border);background:var(--panel2);color:var(--text);font-size:14px;margin-bottom:14px;}
+  select:focus,input:focus{outline:none;border-color:var(--accent);}
+  .result{margin-top:6px;padding:18px;border-radius:10px;background:var(--panel2);border:1px solid var(--border);}
+  .result .big{font-size:28px;font-weight:700;color:var(--accent);}
+  .result .row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:14px;}
+  .result .row:last-child{border-bottom:none;}
+  .result .row .k{color:var(--muted);}
+  .hint{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.5;}
+  .badge{display:inline-block;font-size:11px;padding:3px 8px;border-radius:999px;background:rgba(52,211,153,.12);color:var(--good);font-weight:700;margin-left:8px;vertical-align:middle;}
+  .cta{margin-top:24px;padding:18px;border-radius:12px;border:1px dashed var(--accent2);background:rgba(167,139,250,.06);font-size:14px;color:var(--muted);}
+  .cta strong{color:var(--text);}
+  footer{text-align:center;color:var(--muted);font-size:12px;padding:30px 20px;border-top:1px solid var(--border);margin-top:20px;}
+  .affiliate-note{font-size:11px;color:var(--muted);margin-top:8px;}
+  hr.sep{border:none;border-top:1px solid var(--border);margin:20px 0;}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap" style="padding:0;">
+    <h1>VoIP Network <span>Calculator</span> <span class="badge">Free · No Login</span></h1>
+    <p>Bandwidth, subnet/CIDR, and SLA uptime calculators for VoIP and network engineers. Built from 15+ years of hands-on carrier/PBX/network support — not a generic web widget.</p>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="tabs">
+    <div class="tab active" data-tab="bandwidth">Bandwidth Calculator</div>
+    <div class="tab" data-tab="subnet">Subnet / CIDR Calculator</div>
+    <div class="tab" data-tab="sla">SLA Uptime Calculator</div>
+  </div>
+
+  <!-- BANDWIDTH -->
+  <div class="card panel" id="panel-bandwidth">
+    <div class="grid">
+      <div>
+        <label>Concurrent calls</label>
+        <input type="number" id="bw-calls" value="10" min="1" />
+        <label>Codec</label>
+        <select id="bw-codec">
+          <option value="64">G.711 (64 kbps, best quality)</option>
+          <option value="8">G.729 (8 kbps, compressed)</option>
+          <option value="24" selected>Opus (≈24 kbps, typical VoIP default)</option>
+          <option value="13.3">GSM (13.3 kbps)</option>
+        </select>
+      </div>
+      <div>
+        <label>Packetization interval</label>
+        <select id="bw-ptime">
+          <option value="20" selected>20 ms (standard)</option>
+          <option value="30">30 ms</option>
+          <option value="10">10 ms (lower latency, more overhead)</option>
+        </select>
+        <label>Transport overhead</label>
+        <select id="bw-overhead">
+          <option value="ethernet" selected>Ethernet (RTP+UDP+IP+Eth ≈ 78 bytes/pkt)</option>
+          <option value="mpls">MPLS/WAN (≈ 82 bytes/pkt)</option>
+          <option value="vpn">VPN tunnel (≈ 98 bytes/pkt, encryption overhead)</option>
+        </select>
+      </div>
+    </div>
+    <div class="result" id="bw-result"></div>
+    <div class="hint">Estimate only — actual usage varies with jitter buffer settings, silence suppression (VAD), and real network conditions. Always add 20-30% headroom before sizing a circuit.</div>
+  </div>
+
+  <!-- SUBNET -->
+  <div class="card panel" id="panel-subnet" style="display:none;">
+    <div class="grid">
+      <div>
+        <label>IPv4 address</label>
+        <input type="text" id="sn-ip" value="192.168.1.0" />
+      </div>
+      <div>
+        <label>CIDR prefix</label>
+        <input type="number" id="sn-cidr" value="24" min="1" max="32" />
+      </div>
+    </div>
+    <div class="result" id="sn-result"></div>
+    <div class="hint">Handy when carving out a dedicated VLAN/subnet for phones separate from data traffic — a common fix for jitter issues raised in the SIP trunking article.</div>
+  </div>
+
+  <!-- SLA -->
+  <div class="card panel" id="panel-sla" style="display:none;">
+    <div class="grid">
+      <div>
+        <label>Target uptime %</label>
+        <select id="sla-pct">
+          <option value="99">99% ("two nines")</option>
+          <option value="99.5">99.5%</option>
+          <option value="99.9" selected>99.9% ("three nines")</option>
+          <option value="99.95">99.95%</option>
+          <option value="99.99">99.99% ("four nines")</option>
+          <option value="99.999">99.999% ("five nines")</option>
+        </select>
+      </div>
+      <div>
+        <label>Custom % (optional, overrides above)</label>
+        <input type="number" id="sla-custom" placeholder="e.g. 99.982" step="0.001" min="0" max="100" />
+      </div>
+    </div>
+    <div class="result" id="sla-result"></div>
+    <div class="hint">Use this when writing or reviewing an SLA — matches the framework in the "SLA Structuring" article in the Authority Niche.</div>
+  </div>
+
+  <div class="cta">
+    <strong>Need hardware for this setup?</strong> Affiliate placements for SIP gateways, Mikrotik routers, and PBX hardware go here once Affiliate Ops has CEO-approved programs live.
+    <div class="affiliate-note">{{AFFILIATE:networking-hardware}} — placeholder, not yet wired to a real program.</div>
+  </div>
+</div>
+
+<footer>
+  VoIP Network Calculator — part of VANTAGE. Free tier: unlimited use, no login.<br/>
+  Pro tier (saved calculations, PDF export, bulk mode) — coming once Paddle/Stripe KYC is complete.
+</footer>
+
+<script>
+  // --- tabs ---
+  document.querySelectorAll('.tab').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+      document.querySelectorAll('.panel').forEach(function(p){p.style.display='none';});
+      tab.classList.add('active');
+      document.getElementById('panel-'+tab.dataset.tab).style.display='block';
+    });
+  });
+
+  // --- bandwidth calculator ---
+  function calcBandwidth(){
+    var calls = parseFloat(document.getElementById('bw-calls').value) || 0;
+    var codecKbps = parseFloat(document.getElementById('bw-codec').value);
+    var ptimeMs = parseFloat(document.getElementById('bw-ptime').value);
+    var overheadKey = document.getElementById('bw-overhead').value;
+    var overheadBytes = {ethernet:78, mpls:82, vpn:98}[overheadKey];
+
+    var payloadBytesPerPacket = (codecKbps * 1000 / 8) * (ptimeMs / 1000);
+    var totalBytesPerPacket = payloadBytesPerPacket + overheadBytes;
+    var packetsPerSec = 1000 / ptimeMs;
+    var bitsPerSecPerCall = totalBytesPerPacket * 8 * packetsPerSec;
+    var totalKbps = (bitsPerSecPerCall * calls) / 1000;
+    var totalMbps = totalKbps / 1000;
+    var withHeadroom = totalMbps * 1.25;
+
+    document.getElementById('bw-result').innerHTML =
+      '<div class="big">' + totalMbps.toFixed(2) + ' Mbps</div>' +
+      '<div class="row"><span class="k">Per call</span><span>' + (bitsPerSecPerCall/1000).toFixed(1) + ' kbps</span></div>' +
+      '<div class="row"><span class="k">Total (' + calls + ' calls)</span><span>' + totalKbps.toFixed(0) + ' kbps / ' + totalMbps.toFixed(2) + ' Mbps</span></div>' +
+      '<div class="row"><span class="k">Recommended circuit size (+25% headroom)</span><span>' + withHeadroom.toFixed(2) + ' Mbps</span></div>';
+  }
+  ['bw-calls','bw-codec','bw-ptime','bw-overhead'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', calcBandwidth);
+    document.getElementById(id).addEventListener('change', calcBandwidth);
+  });
+  calcBandwidth();
+
+  // --- subnet calculator ---
+  function ipToInt(ip){
+    var parts = ip.split('.').map(Number);
+    if(parts.length!==4 || parts.some(function(p){return isNaN(p)||p<0||p>255;})) return null;
+    return ((parts[0]<<24) | (parts[1]<<16) | (parts[2]<<8) | parts[3]) >>> 0;
+  }
+  function intToIp(int){
+    return [(int>>>24)&255,(int>>>16)&255,(int>>>8)&255,int&255].join('.');
+  }
+  function calcSubnet(){
+    var ip = document.getElementById('sn-ip').value.trim();
+    var cidr = parseInt(document.getElementById('sn-cidr').value, 10);
+    var ipInt = ipToInt(ip);
+    var out = document.getElementById('sn-result');
+    if(ipInt===null || isNaN(cidr) || cidr<1 || cidr>32){
+      out.innerHTML = '<div class="hint" style="color:#f87171;">Enter a valid IPv4 address and CIDR prefix (1-32).</div>';
+      return;
+    }
+    var maskInt = cidr===0 ? 0 : (0xFFFFFFFF << (32-cidr)) >>> 0;
+    var network = (ipInt & maskInt) >>> 0;
+    var broadcast = (network | (~maskInt >>> 0)) >>> 0;
+    var totalHosts = Math.pow(2, 32-cidr);
+    var usableHosts = cidr>=31 ? totalHosts : Math.max(totalHosts-2, 0);
+    var firstUsable = cidr>=31 ? network : network+1;
+    var lastUsable = cidr>=31 ? broadcast : broadcast-1;
+
+    out.innerHTML =
+      '<div class="big">' + intToIp(network) + '/' + cidr + '</div>' +
+      '<div class="row"><span class="k">Subnet mask</span><span>' + intToIp(maskInt) + '</span></div>' +
+      '<div class="row"><span class="k">Network address</span><span>' + intToIp(network) + '</span></div>' +
+      '<div class="row"><span class="k">Broadcast address</span><span>' + intToIp(broadcast) + '</span></div>' +
+      '<div class="row"><span class="k">Usable range</span><span>' + intToIp(firstUsable) + ' – ' + intToIp(lastUsable) + '</span></div>' +
+      '<div class="row"><span class="k">Usable hosts</span><span>' + usableHosts.toLocaleString() + '</span></div>';
+  }
+  ['sn-ip','sn-cidr'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', calcSubnet);
+  });
+  calcSubnet();
+
+  // --- SLA calculator ---
+  function calcSla(){
+    var custom = document.getElementById('sla-custom').value;
+    var pct = custom !== '' ? parseFloat(custom) : parseFloat(document.getElementById('sla-pct').value);
+    var out = document.getElementById('sla-result');
+    if(isNaN(pct) || pct<0 || pct>100){
+      out.innerHTML = '<div class="hint" style="color:#f87171;">Enter a valid percentage (0-100).</div>';
+      return;
+    }
+    var downtimeFraction = (100-pct)/100;
+    var yearMin = 365*24*60*downtimeFraction;
+    var monthMin = 30*24*60*downtimeFraction;
+    var weekMin = 7*24*60*downtimeFraction;
+    var dayMin = 24*60*downtimeFraction;
+    function fmt(mins){
+      if(mins<1) return (mins*60).toFixed(1)+' sec';
+      if(mins<60) return mins.toFixed(1)+' min';
+      if(mins<1440) return (mins/60).toFixed(2)+' hrs';
+      return (mins/1440).toFixed(2)+' days';
+    }
+    out.innerHTML =
+      '<div class="big">' + pct + '% uptime</div>' +
+      '<div class="row"><span class="k">Allowed downtime / year</span><span>' + fmt(yearMin) + '</span></div>' +
+      '<div class="row"><span class="k">Allowed downtime / month</span><span>' + fmt(monthMin) + '</span></div>' +
+      '<div class="row"><span class="k">Allowed downtime / week</span><span>' + fmt(weekMin) + '</span></div>' +
+      '<div class="row"><span class="k">Allowed downtime / day</span><span>' + fmt(dayMin) + '</span></div>';
+  }
+  ['sla-pct','sla-custom'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', calcSla);
+    document.getElementById(id).addEventListener('change', calcSla);
+  });
+  calcSla();
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+# Cloudflare Worker config — stub, not deployed yet.
+# Deploy with: wrangler deploy (from this directory), once:
+#   1. Paddle/Stripe KYC is complete (human-only step)
+#   2. CEO has confirmed the Pro-tier feature list
+#   3. A KV or D1 binding is added here if saved-calculations ships
+
+name = "vantage-branch-c-calculator"
+main = "index.js"
+compatibility_date = "2026-09-25"
+
+# [[kv_namespaces]]
+# binding = "SAVED_CALCS"
+# id = "TBD"
