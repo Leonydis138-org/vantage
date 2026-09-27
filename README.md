@@ -1,6 +1,6 @@
 # VANTAGE — Autonomous Revenue System
 
-Owner/CEO: Juan-Louw Greyling
+Owner/CEO: Juan-Louw Greyling 
 
 Three-branch content + micro-SaaS revenue engine, run mostly by AI agents with the CEO as trigger and approver. Full spec in [`docs/build-spec.md`](docs/build-spec.md).
 
